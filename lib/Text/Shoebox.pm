@@ -1,21 +1,25 @@
 
-# Time-stamp: "2001-05-27 19:22:03 MDT"
+# Time-stamp: "2004-03-24 15:56:37 AST"
 require 5;
 package Text::Shoebox;
 use strict;
 use integer; # we don't need noninteger math in here
 use Carp qw(carp croak);
 use vars qw(@ISA @EXPORT $Debug $VERSION %p);
+
+require UNIVERSAL;
+
 require Exporter;
 @ISA = qw(Exporter);
 @EXPORT = qw(read_sf write_sf are_hw_keys_uniform are_hw_values_unique);
 
 $Debug = 0 unless defined $Debug;
-$VERSION = "0.22";
+$VERSION = "1.01";
+
 
 =head1 NAME
 
-Text::Shoebox -- read and write SIL Shoebox Standard Format (.sf) files
+Text::Shoebox - read and write SIL Shoebox Standard Format (.sf) files
 
 =head1 SYNOPSIS
 
@@ -52,11 +56,17 @@ use SF files with something other than Shoebox, I'd be interested in
 hearing about it, particularly about whether such files and
 Text::Shoebox are happily compatible.)
 
+=head1 ALTERNATE INTERFACE
+
+Instead of the sort of low-level functional interface described below,
+you might like the tidier object-oriented interface now provided by
+L<Text::Shoebox::Lexicon>.
+
 =head1 FUNCTIONS
 
 =over
 
-=item $lex_lol = read_fs(...options...)
+=item $lex_lol = read_sf(...options...)
 
 Reads entries in Standard Format from the source specified.  If no
 entries were read, returns false.  Otherwise, returns a reference to
@@ -107,7 +117,7 @@ new array.
 Example use:
 
   use Text::Shoebox;
-  my $lexicon = read_fs(from_file => 'foo.sf')
+  my $lexicon = read_sf(from_file => 'foo.sf')
    || die "No entries?";
   print scalar(@$lexicon), " entries read.\n";
   print "First entry has ",
@@ -244,7 +254,7 @@ sub read_sf {
 
 #--------------------------------------------------------------------------
 
-=item write_fs(...options...)
+=item write_sf(...options...)
 
 This writes the given lexicon, in Standard Format, to the destination
 specified.  If all entries were written, returns true; otherwise (in
@@ -308,7 +318,7 @@ sub write_sf {
     $fh = *OUT{IO};
     binmode($fh);
   } else {
-    croak "write_fs needs either a to_handle or a to_file option";
+    croak "write_sf needs either a to_handle or a to_file option";
   }
 
   my $nl;
@@ -410,7 +420,8 @@ sub are_hw_keys_uniform {
    unless @_ == 1;
   my $lex = $_[0];
   $Debug && carp('Argument to are_hw_keys_uniform isn\'t a listref'), return 0
-   unless defined $lex and ref $lex eq 'ARRAY';
+   unless defined $lex and ref $lex and UNIVERSAL::isa($lex, 'ARRAY');
+
   $Debug && carp('Empty lexicon to are_hw_keys_uniform'), return 0
    unless @$lex;
 
@@ -481,7 +492,7 @@ sub _dump {
   my $safe;
   my $toggle = 0;
   foreach my $e (@$lol) {
-    next unless defined $e and ref $e eq 'ARRAY' and @$e;
+    next unless defined $e and ref $e and UNIVERSAL::isa($e, 'ARRAY');
     print "  [ ";
     foreach my $v (@$e) {
       ($safe = $v) =~ 
@@ -516,9 +527,16 @@ You should be aware that Shoebox, or whatever other programs use SF
 files, may have a I<much> more restricted view of what can be in a
 field key or value.
 
+=head1 SEE ALSO
+
+L<Text::Shoebox::Lexicon>
+
+L<Text::Shoebox::Entry>
+
+
 =head1 COPYRIGHT
 
-Copyright 2000-2001, Sean M. Burke C<sburke@cpan.org>, all rights
+Copyright 2000-4, Sean M. Burke C<sburke@cpan.org>, all rights
 reserved.  This program is free software; you can redistribute it
 and/or modify it under the same terms as Perl itself.
 

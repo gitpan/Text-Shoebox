@@ -1,11 +1,11 @@
-# Before `make install' is performed this script should be runnable with
-# `make test'. After `make install' it should work as `perl test.pl'
-# Time-stamp: "2000-09-05 02:04:01 MDT"
 
+# Time-stamp: "2004-03-24 15:49:41 AST"
+
+require 5;
 use strict;
 use Test;
 BEGIN { plan tests => 18 };
-use Text::Shoebox 0.21;
+use Text::Shoebox 1.01;
 ok 1;
 
 my $temp = 'temp.sf';

@@ -1,7 +1,12 @@
-sf_dump
-Shoebox.pm
 ChangeLog
-MANIFEST
+lib/Text/Shoebox.pm
+lib/Text/Shoebox/Entry.pm
+lib/Text/Shoebox/Lexicon.pm
 Makefile.PL
+MANIFEST
+MANIFEST.SKIP
 README
-test.pl
+sf_dump
+t/00_about.t
+t/10_basic.t
+META.yml                                 Module meta-data (added by MakeMaker)

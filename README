@@ -1,5 +1,5 @@
 README for Text::Shoebox
-                                        Time-stamp: "2000-09-05 02:17:24 MDT"
+                                        Time-stamp: "2004-03-24 15:43:30 AST"
 
 			    Text::Shoebox
 	Read and write SIL Shoebox Standard Format (.sf) files
@@ -24,7 +24,12 @@ files with something other than Shoebox, I'd be interested in hearing
 about it, particularly about whether such files and Text::Shoebox are
 happily compatible.)
 
+
+See also the tidier, object-oriented interface presented by
+Text::Shoebox::Lexicon.
+
 [end POD excerpt]
+
 
 
 PREREQUISITES
@@ -37,8 +42,9 @@ Text::Shoebox doesn't use any nonstandard modules.
 
 INSTALLATION
 
-You install Text::Shoebox, as you would install any perl module
-library, by running these commands:
+You install Text::Shoebox and its classes Text::Shoebox::Lexicon and
+Text::Shoebox::Entry, as you would install any perl module library, by
+running these commands:
 
    perl Makefile.PL
    make
@@ -55,19 +61,13 @@ Then you may need something like
   setenv PERLLIB "$HOME/perl"
 in your shell initialization file (e.g., ~/.cshrc).
 
-For more info, see the Perl faqs.
+For more info, see perldoc perlmodinstall.
 
 
 DOCUMENTATION
 
-POD-format documentation is included in Shoebox.pm.  POD is readable
+POD-format documentation is included in the .pm files.  POD is readable
 with the 'perldoc' utility.  See ChangeLog for recent changes.
-
-
-MACPERL INSTALLATION NOTES
-
-Don't bother with the makefiles.  Just make a Text directory in your
-MacPerl site_lib or lib directory, and move Shoebox.pm into there.
 
 
 SUPPORT
@@ -85,7 +85,7 @@ Comprehensive Perl Archive Network (CPAN).  Visit
 
 COPYRIGHT
 
-Copyright 2000, Sean M. Burke <sburke@cpan.org>, all rights reserved.
+Copyright 2000-, Sean M. Burke <sburke@cpan.org>, all rights reserved.
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.
 
