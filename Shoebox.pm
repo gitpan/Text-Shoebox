@@ -1,5 +1,5 @@
 
-# Time-stamp: "2000-09-05 02:16:29 MDT"
+# Time-stamp: "2001-05-27 19:22:03 MDT"
 require 5;
 package Text::Shoebox;
 use strict;
@@ -11,7 +11,7 @@ require Exporter;
 @EXPORT = qw(read_sf write_sf are_hw_keys_uniform are_hw_values_unique);
 
 $Debug = 0 unless defined $Debug;
-$VERSION = "0.21";
+$VERSION = "0.22";
 
 =head1 NAME
 
@@ -33,7 +33,7 @@ Text::Shoebox -- read and write SIL Shoebox Standard Format (.sf) files
   warn "hw field-values aren't unique\n"
    unless are_hw_values_unique($lex);
   
-  write_fs(from => $lex, to_file => "merged.sf")
+  write_sf(from => $lex, to_file => "merged.sf")
    or die "Couldn't write to merged.sf: $!";
 
 =head1 DESCRIPTION
@@ -72,11 +72,11 @@ The options are:
 This specifies that the source of the SF data is a file, whose
 filespec is given.
 
-=item from_fh => FILEHANDLE
+=item from_handle => FILEHANDLE
 
 This specifies that the source of the SF data is a given filehandle.
-(Examples of filehandle values: or global filehandle passed either
-like C<*MYFH{IO}> or C<*MYFH>; or object values from an IO class like
+(Examples of filehandle values: a global filehandle passed either
+like C<*MYFH{IO}> or C<*MYFH>; or an object value from an IO class like
 IO::Socket or IO::Handle.)
 
 The filehandle isn't closed when all its data is read.
@@ -498,8 +498,6 @@ sub _dump {
 
 #--------------------------------------------------------------------------
 
-=over
-
 =back
 
 =head1 A NOTE ABOUT VALIDITY
@@ -520,7 +518,7 @@ field key or value.
 
 =head1 COPYRIGHT
 
-Copyright 2000, Sean M. Burke C<sburke@cpan.org>, all rights
+Copyright 2000-2001, Sean M. Burke C<sburke@cpan.org>, all rights
 reserved.  This program is free software; you can redistribute it
 and/or modify it under the same terms as Perl itself.
 
