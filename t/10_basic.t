@@ -1,5 +1,5 @@
 
-# Time-stamp: "2004-03-24 15:49:41 AST"
+# Time-stamp: "2004-04-03 20:23:07 ADT"
 
 require 5;
 use strict;
@@ -30,7 +30,13 @@ sub idem {
   return 1;
 }
 
-$Text::Shoebox::Debug = 2;
+##  $Text::Shoebox::Debug = 2;
+
+if(-e $temp) {
+  print "# Unlinking $temp...\n";
+  unlink $temp or die "Can't unlink $temp at start!";
+}
+
 
 ok( write_sf(to_file => $temp, from => $idem) );
 ok( $other = read_sf(from_file => $temp) and idem );
@@ -61,5 +67,5 @@ ok are_hw_values_unique($other);
 push @$other, @$other; # cheap hack
 ok !are_hw_values_unique($other);
 
-print "Finit.\n";
+print "# End.\n";
 unlink $temp or warn "Can't unlink $temp";

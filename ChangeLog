@@ -1,6 +1,19 @@
 Revision history for Perl extension Text-Shoebox
-                                        Time-stamp: "2004-03-24 15:51:47 AST"
+                                        Time-stamp: "2004-04-03 21:47:55 ADT"
 
+2004-04-03   Sean M. Burke  sburke@cpan.org
+	* Version 1.02 -- some bugfixes, lots of new docs and tests
+
+	The classes Text::Shoebox::Lexicon and Text::Shoebox::Entry now
+	have complete documentation!
+
+	There's also now a whole bunch of tests in t/*.t
+	And in writing those, I turned up some errors in the previous
+	versions -- so don't use anything before 1.02!
+
+	Also, some doc typoes fixed in Text::Shoebox.
+	
+	
 2004-03-24   Sean M. Burke  sburke@cpan.org
 	* Version 1.01 -- no basic changes to Text::Shoebox, but adding a
 	new interface.

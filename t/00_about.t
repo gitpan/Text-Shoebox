@@ -1,5 +1,6 @@
 
 require 5;
+# Time-stamp: "2004-04-03 20:23:04 ADT"
 use Test;
 BEGIN { plan tests => 1; }
 use Text::Shoebox;

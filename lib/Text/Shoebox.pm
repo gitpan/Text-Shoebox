@@ -1,21 +1,18 @@
 
-# Time-stamp: "2004-03-24 15:56:37 AST"
+# Time-stamp: "2004-04-03 20:20:51 ADT"
 require 5;
 package Text::Shoebox;
 use strict;
 use integer; # we don't need noninteger math in here
 use Carp qw(carp croak);
 use vars qw(@ISA @EXPORT $Debug $VERSION %p);
-
-require UNIVERSAL;
-
 require Exporter;
+require UNIVERSAL;
 @ISA = qw(Exporter);
 @EXPORT = qw(read_sf write_sf are_hw_keys_uniform are_hw_values_unique);
 
 $Debug = 0 unless defined $Debug;
-$VERSION = "1.01";
-
+$VERSION = "1.02";
 
 =head1 NAME
 
@@ -56,11 +53,12 @@ use SF files with something other than Shoebox, I'd be interested in
 hearing about it, particularly about whether such files and
 Text::Shoebox are happily compatible.)
 
-=head1 ALTERNATE INTERFACE
+=head1 OBJECT-ORIENTED INTERFACE
 
-Instead of the sort of low-level functional interface described below,
-you might like the tidier object-oriented interface now provided by
-L<Text::Shoebox::Lexicon>.
+This module provides a functional interface.  If you want an
+object-oriented interface, with a bit more convenience, then see
+the classes L<Text::Shoebox::Lexicon> and  L<Text::Shoebox::Entry>.
+
 
 =head1 FUNCTIONS
 
@@ -71,7 +69,8 @@ L<Text::Shoebox::Lexicon>.
 Reads entries in Standard Format from the source specified.  If no
 entries were read, returns false.  Otherwise, returns a reference to
 the array that the entries were added to (which will be a new array,
-unless the "into" option is set).
+unless the "into" option is set).  If there's an I/O error while reading
+(like if you specify an unreadable file), then this routine dies.
 
 The options are:
 
@@ -102,7 +101,7 @@ format of the file by reading the first 2K of the file and looking for
 a CRLF ("\cm\cj"), an LF ("\cj"), or a CR ("\cm").  If you need to
 stop it from trying to guess, just stipulate an "rs" value of C<$/>.
 
-If the SF source is specified by a "from_file" option, and you don't
+If the SF source is specified by a "from_handle" option, and you don't
 specify an "rs" option, then Text::Shoebox will just use the value in
 the Perl variable C<$/> (the global RS value).
 
@@ -259,8 +258,11 @@ sub read_sf {
 This writes the given lexicon, in Standard Format, to the destination
 specified.  If all entries were written, returns true; otherwise (in
 case of an IO error), returns false, in which case you should
-check C<$!>.
+check C<$!>.  Note that this routine I<doesn't> die in the case of
+an I/O error, so you should always check the return value of this
+function, as with:
 
+  write_sf(...) || die "Couldn't write: $!";
 
 The options are:
 
@@ -344,13 +346,17 @@ sub write_sf {
   for($i_entry = 0; $i_entry < @$from; ++$i_entry) {
     unless(defined(
       $e = $from->[$i_entry]  # copy the entry ref
-     ) and ref $e eq 'ARRAY'
+     ) and (
+       ref $e eq 'ARRAY'
+       or UNIVERSAL::isa($e, 'ARRAY')
+     )
     ) {
-      print "Skipping $e -- not an entry" if $Debug;
+      print "Skipping $e -- not an entry\n" if $Debug;
+      Carp::cluck "Skipping $e -- not an entry";
       next Entry;
     }
     unless(@$e) {
-      print "Skipping $e -- a null entry" if $Debug;
+      print "Skipping $e -- a null entry\n" if $Debug;
       next Entry;
     }
 
@@ -420,8 +426,7 @@ sub are_hw_keys_uniform {
    unless @_ == 1;
   my $lex = $_[0];
   $Debug && carp('Argument to are_hw_keys_uniform isn\'t a listref'), return 0
-   unless defined $lex and ref $lex and UNIVERSAL::isa($lex, 'ARRAY');
-
+   unless defined $lex and ref $lex eq 'ARRAY';
   $Debug && carp('Empty lexicon to are_hw_keys_uniform'), return 0
    unless @$lex;
 
@@ -488,7 +493,9 @@ sub are_hw_values_unique {
 
 sub _dump {
   my $lol = $_[0];
+
   print "[   #", scalar(@$lol), " entries...\n";
+
   my $safe;
   my $toggle = 0;
   foreach my $e (@$lol) {
@@ -533,10 +540,9 @@ L<Text::Shoebox::Lexicon>
 
 L<Text::Shoebox::Entry>
 
-
 =head1 COPYRIGHT
 
-Copyright 2000-4, Sean M. Burke C<sburke@cpan.org>, all rights
+Copyright 2000-2004, Sean M. Burke C<sburke@cpan.org>, all rights
 reserved.  This program is free software; you can redistribute it
 and/or modify it under the same terms as Perl itself.
 
